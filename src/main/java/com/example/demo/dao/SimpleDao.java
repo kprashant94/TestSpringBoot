@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by Prashant Kumar on 1/8/18
  */
-
+@Service
 public class SimpleDao {
 
     Configuration configuration = new Configuration().configure();
@@ -41,10 +42,16 @@ public class SimpleDao {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.save(person);
-        transaction.commit();
+        try {
+            session.save(person);
+            transaction.commit();
 
-        session.close();
-        return true;
+            session.close();
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+
     }
 }
